@@ -1,0 +1,10 @@
+Binaries/
+Intermediate/
+Saved/
+DerivedDataCache/
+WildAcres.sln
+.vs/
+.vscode/
+*.VC.db
+*.pdb
+*.log
