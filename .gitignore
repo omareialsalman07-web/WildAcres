@@ -1,10 +1,74 @@
+############################
+# Unreal Engine folders
+############################
+
 Binaries/
+DerivedDataCache/
 Intermediate/
 Saved/
-DerivedDataCache/
-WildAcres.sln
+Build/
+Releases/
+WindowsNoEditor/
+LinuxNoEditor/
+MacNoEditor/
+
+############################
+# Unreal project files (local/generated)
+############################
+
+*.sln
 .vs/
 .vscode/
 *.VC.db
-*.pdb
+*.opendb
+
+############################
+# Unreal logs & temp
+############################
+
 *.log
+*.tlog
+*.lastbuildstate
+
+############################
+# OS files
+############################
+
+.DS_Store
+Thumbs.db
+
+############################
+# Visual Studio
+############################
+
+*.user
+*.suo
+*.userprefs
+
+############################
+# Rider / JetBrains (if used)
+############################
+
+.idea/
+
+############################
+# Crash reports
+############################
+
+Saved/Crashes/
+
+############################
+# Unreal Pak / packaged builds
+############################
+
+*.pak
+*.utoc
+*.ucas
+
+############################
+# Optional (if you use these tools)
+############################
+
+*.aps
+*.ncb
+*.cache
