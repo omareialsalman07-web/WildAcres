@@ -12,11 +12,9 @@ class WILDACRES_API AWildCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	AWildCharacter();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	void MoveForward(float Value);
@@ -25,14 +23,29 @@ protected:
 	void LookUp(float Value);
 	void Turn(float Value);
 
+	// Components
 	UPROPERTY(VisibleAnywhere)
 	class UCameraComponent* Camera;
 
+	UPROPERTY(VisibleAnywhere)
+	class UInteractionComponent* InteractionComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	class UInventoryComponent* InventoryComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* HoldPoint;
+
+private:
+	void InteractButton_Pressed();
+	void DropButton_Pressed();
+
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	FORCEINLINE UInventoryComponent* GetInventoryComponent() { return InventoryComponent; }
+
+	FORCEINLINE USceneComponent* GetHoldPoint() { return HoldPoint; }
 };
