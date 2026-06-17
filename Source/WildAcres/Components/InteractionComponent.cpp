@@ -1,7 +1,10 @@
 #include "InteractionComponent.h"
 #include "Components/SphereComponent.h"
 #include "../Pickups/PickupItem.h"
+#include "../Character/WildCharacter.h"
+#include "InventoryComponent.h"
 #include "../Player/WildPlayerConterller.h"
+
 
 UInteractionComponent::UInteractionComponent()
 {
@@ -75,9 +78,17 @@ void UInteractionComponent::_UpdateInteractionText()
 	AWildPlayerConterller* PC = Cast<AWildPlayerConterller>(world->GetFirstPlayerController());
 	if (!PC) return;
 
-	if(overlappedInteractable)
-		PC->ShowInteractionText(FText::FromString(overlappedInteractable->GetInteractionMessage()));
-	else
-		PC->ShowInteractionText(FText::FromString(""));
+	AWildCharacter* character = Cast<AWildCharacter>(GetOwner());
+	if (!character) return;
+
+	UInventoryComponent* inv = character->GetInventoryComponent();
+
+	if (inv && !inv->isFull())
+	{
+		if (overlappedInteractable)
+			PC->ShowInteractionText(FText::FromString(overlappedInteractable->GetInteractionMessage()));
+		else
+			PC->ShowInteractionText(FText::FromString(""));
+	}
 }
 

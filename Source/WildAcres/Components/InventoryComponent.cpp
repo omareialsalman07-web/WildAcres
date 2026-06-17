@@ -24,7 +24,7 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 void UInventoryComponent::AddItem(AActor* Item)
 {
-	if (!Item || !WildCharacter) return;
+	if (!Item || !WildCharacter || isFull()) return;
 
 	Item->AttachToComponent(WildCharacter->GetHoldPoint(),FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 
@@ -49,4 +49,9 @@ void UInventoryComponent::DropItem(AActor* item)
 	item->SetActorEnableCollision(true);
 
 	CurrentItem = nullptr;
+}
+
+bool UInventoryComponent::isFull()
+{
+	return CurrentItem != nullptr;
 }

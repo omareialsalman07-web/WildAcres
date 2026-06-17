@@ -29,5 +29,7 @@ public:
 	void AddItem(AActor* item);
 	void DropItem(AActor* item);
 
+	bool isFull();
+
 	AActor* GetSelectedItem() { return CurrentItem; }
 };
