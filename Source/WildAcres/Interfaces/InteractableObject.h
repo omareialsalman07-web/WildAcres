@@ -22,4 +22,5 @@ class WILDACRES_API IInteractableObject
 
 public:
 	virtual void OnInteract(AActor* Interactor) = 0;
+	virtual FString GetInteractionMessage() const = 0;
 };

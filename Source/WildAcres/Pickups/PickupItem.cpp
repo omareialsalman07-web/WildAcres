@@ -44,3 +44,8 @@ void APickupItem::OnInteract(AActor* interactor)
 		}
 	}
 }
+
+FString APickupItem::GetInteractionMessage() const
+{
+	return FString("[E] To Pickup");
+}

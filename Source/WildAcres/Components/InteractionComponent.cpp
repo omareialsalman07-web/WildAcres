@@ -1,6 +1,7 @@
 #include "InteractionComponent.h"
 #include "Components/SphereComponent.h"
 #include "../Pickups/PickupItem.h"
+#include "../Player/WildPlayerConterller.h"
 
 UInteractionComponent::UInteractionComponent()
 {
@@ -37,7 +38,10 @@ void UInteractionComponent::OnOverlapBegin(UPrimitiveComponent* OverlappedCompon
 	if (OtherActor && OtherActor->Implements<UInteractableObject>())
 	{
 		overlappedInteractable = Cast<IInteractableObject>(OtherActor);
+
 	}
+
+	_UpdateInteractionText();
 }
 
 void UInteractionComponent::OnOverlapEnd(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex)
@@ -46,6 +50,7 @@ void UInteractionComponent::OnOverlapEnd(UPrimitiveComponent * OverlappedCompone
 	{
 		overlappedInteractable = nullptr;
 	}
+	_UpdateInteractionText();
 }
 
 
@@ -60,5 +65,19 @@ void UInteractionComponent::Interact()
 {
 	if(overlappedInteractable)
 		overlappedInteractable->OnInteract(GetOwner());
+}
+
+void UInteractionComponent::_UpdateInteractionText()
+{
+	UWorld* world = GetWorld();
+	if (!world) return;
+
+	AWildPlayerConterller* PC = Cast<AWildPlayerConterller>(world->GetFirstPlayerController());
+	if (!PC) return;
+
+	if(overlappedInteractable)
+		PC->ShowInteractionText(FText::FromString(overlappedInteractable->GetInteractionMessage()));
+	else
+		PC->ShowInteractionText(FText::FromString(""));
 }
 

@@ -24,9 +24,12 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* Mesh;
 
+private:
+
+
 public:	
 	virtual void Tick(float DeltaTime) override;
 
 	void OnInteract(AActor* interactor) override;
-
+	FString GetInteractionMessage() const override;
 };

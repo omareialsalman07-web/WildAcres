@@ -34,4 +34,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void Interact();
+
+private:
+	void _UpdateInteractionText();
 };
