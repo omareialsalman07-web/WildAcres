@@ -1,6 +1,10 @@
 #include "WildCharacter.h"
+
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+
 #include "../Components/InteractionComponent.h"
 #include "../Components/InventoryComponent.h"
 
@@ -8,23 +12,59 @@ AWildCharacter::AWildCharacter()
 {
  	PrimaryActorTick.bCanEverTick = false;
 
-	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	Camera->SetupAttachment(GetCapsuleComponent());
+	_CreateComponents();
+	_SetupCamera();
+	_SetupCharacter();
+	_SetupMovment();
+}
 
-	Camera->SetRelativeLocation(FVector(0.f, 0.f, 64.f));
-	Camera->bUsePawnControlRotation = true;
-
-	bUseControllerRotationYaw = true;
+void AWildCharacter::_CreateComponents()
+{
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>(TEXT("InteractionComponent"));
-	
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
+}
 
-	HoldPoint = CreateDefaultSubobject<USceneComponent>(TEXT("HoldPoint"));
-	HoldPoint->SetupAttachment(Camera);
+void AWildCharacter::_SetupCharacter()
+{
+	// Set size for collision capsule
+	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
-	HoldPoint->SetRelativeLocation(FVector(100.f, 0.f, -20.f));
+	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -100.0f));
+	GetMesh()->SetRelativeRotation(FRotator(0.f, 0.f, -100.0f));
 
+	// Configure character movement
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
+}
+
+void AWildCharacter::_SetupCamera()
+{
+	CameraBoom->SetupAttachment(RootComponent);
+	CameraBoom->TargetArmLength = 300.0f;
+	CameraBoom->bUsePawnControlRotation = true;
+
+	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	FollowCamera->bUsePawnControlRotation = false;
+}
+
+void AWildCharacter::_SetupMovment()
+{
+	// Don't rotate when the controller rotates. Let that just affect the camera.
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+
+	// Note: For faster iteration times these variables, and many more, can be tweaked in the Character Blueprint
+	// instead of recompiling to adjust them
+	GetCharacterMovement()->JumpZVelocity = 500.f;
+	GetCharacterMovement()->AirControl = 0.35f;
+	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
+	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
+	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
 }
 
 void AWildCharacter::BeginPlay()
@@ -58,7 +98,14 @@ void AWildCharacter::MoveForward(float Value)
 {
 	if (Value != 0.f)
 	{
-		AddMovementInput(GetActorForwardVector(), Value);
+		// find out which way is forward
+		const FRotator Rotation = GetController()->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// get forward vector
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+		AddMovementInput(ForwardDirection, Value);
 	}
 }
 
@@ -66,7 +113,14 @@ void AWildCharacter::MoveRight(float Value)
 {
 	if (Value != 0.f)
 	{
-		AddMovementInput(GetActorRightVector(), Value);
+		// find out which way is forward
+		const FRotator Rotation = GetController()->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// get right vector 
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		AddMovementInput(RightDirection, Value);
 	}
 }
 

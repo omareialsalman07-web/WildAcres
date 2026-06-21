@@ -24,21 +24,27 @@ protected:
 	void Turn(float Value);
 
 	// Components
-	UPROPERTY(VisibleAnywhere)
-	class UCameraComponent* Camera;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	class USpringArmComponent* CameraBoom;
 
-	UPROPERTY(VisibleAnywhere)
+	/** Follow camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	class UCameraComponent* FollowCamera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UInteractionComponent* InteractionComponent;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UInventoryComponent* InventoryComponent;
-
-	UPROPERTY(VisibleAnywhere)
-	USceneComponent* HoldPoint;
 
 private:
 	void InteractButton_Pressed();
 	void DropButton_Pressed();
+
+	void _CreateComponents();
+	void _SetupCharacter();
+	void _SetupCamera();
+	void _SetupMovment();
 
 public:	
 	virtual void Tick(float DeltaTime) override;
@@ -46,6 +52,4 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	FORCEINLINE UInventoryComponent* GetInventoryComponent() { return InventoryComponent; }
-
-	FORCEINLINE USceneComponent* GetHoldPoint() { return HoldPoint; }
 };

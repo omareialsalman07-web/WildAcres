@@ -26,7 +26,7 @@ void UInventoryComponent::AddItem(AActor* Item)
 {
 	if (!Item || !WildCharacter || isFull()) return;
 
-	Item->AttachToComponent(WildCharacter->GetHoldPoint(),FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	Item->AttachToComponent(WildCharacter->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "HandGrip_R");
 
 	Item->SetActorEnableCollision(false);
 
