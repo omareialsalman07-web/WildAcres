@@ -92,6 +92,7 @@ void AWildCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AWildCharacter::Jump);
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AWildCharacter::InteractButton_Pressed);
 	PlayerInputComponent->BindAction("Drop", IE_Pressed, this, &AWildCharacter::DropButton_Pressed);
+	PlayerInputComponent->BindAction("Use", IE_Pressed, this, &AWildCharacter::UseButton_Pressed);
 }
 
 void AWildCharacter::MoveForward(float Value)
@@ -159,6 +160,19 @@ void AWildCharacter::DropButton_Pressed()
 		return;
 	}
 
-	// TEMPORARY : for now as we have one item in the inventory
 	InventoryComponent->DropItem(InventoryComponent->GetSelectedItem());
+}
+
+void AWildCharacter::UseButton_Pressed()
+{
+	if (!InventoryComponent)
+	{
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, FString("Inventory Component is NULL"));
+		}
+		return;
+	}
+
+	InventoryComponent->UseCurrentItem();
 }

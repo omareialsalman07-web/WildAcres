@@ -23,11 +23,15 @@ private:
 
 	class AWildCharacter* WildCharacter;
 
+	void BindUseEvent();
+	void ExecuteCurrentItem();
+
 public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void AddItem(AActor* item);
 	void DropItem(AActor* item);
+	void UseCurrentItem();
 
 	bool isFull();
 

@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "../Interfaces/InteractableObject.h"
+#include "../Interfaces/UsableObject.h"
 #include "PickupItem.generated.h"
 
 UCLASS()
-class WILDACRES_API APickupItem : public AActor, public IInteractableObject
+class WILDACRES_API APickupItem : public AActor, public IInteractableObject, public IUsableObject
 {
 	GENERATED_BODY()
 	
@@ -24,12 +25,15 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* Mesh;
 
-private:
-
+	UPROPERTY(EditAnywhere, Category = "Animation")
+	UAnimMontage* UseAnimMonage;
 
 public:	
 	virtual void Tick(float DeltaTime) override;
 
 	void OnInteract(AActor* interactor) override;
 	FString GetInteractionMessage() const override;
+
+	 void StartUse(AActor* User) override;
+	 void ExecuteUse(AActor* User) override;
 };

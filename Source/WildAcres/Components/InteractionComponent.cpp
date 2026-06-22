@@ -33,11 +33,6 @@ void UInteractionComponent::BeginPlay()
 
 void UInteractionComponent::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, FString("Overlaped with actor"));
-	}
-
 	if (OtherActor && OtherActor->Implements<UInteractableObject>())
 	{
 		overlappedInteractable = Cast<IInteractableObject>(OtherActor);

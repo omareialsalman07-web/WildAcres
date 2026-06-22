@@ -6,6 +6,9 @@
 #include "GameFramework/Character.h"
 #include "WildCharacter.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnUseAnimEvent);
+
+
 UCLASS()
 class WILDACRES_API AWildCharacter : public ACharacter
 {
@@ -40,6 +43,7 @@ protected:
 private:
 	void InteractButton_Pressed();
 	void DropButton_Pressed();
+	void UseButton_Pressed();
 
 	void _CreateComponents();
 	void _SetupCharacter();
@@ -52,4 +56,6 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	FORCEINLINE UInventoryComponent* GetInventoryComponent() { return InventoryComponent; }
+
+	FOnUseAnimEvent OnUseAnimEvent;
 };

@@ -49,3 +49,28 @@ FString APickupItem::GetInteractionMessage() const
 {
 	return FString("[E] To Pickup");
 }
+
+void APickupItem::StartUse(AActor* User)
+{
+	if (!UseAnimMonage)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, TEXT("No Montage Assigned"));
+		return;
+	}
+
+	ACharacter* character = Cast<ACharacter>(User);
+	if (character)
+	{
+		character->PlayAnimMontage(UseAnimMonage);
+	}
+}
+
+void APickupItem::ExecuteUse(AActor * User)
+{
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Black, TEXT("On excecute use"));
+		return;
+	}
+}
+
